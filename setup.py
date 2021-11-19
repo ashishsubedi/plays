@@ -11,5 +11,5 @@ setup(
     entry_points={"console_scripts": ["plays = plays.main:plays"]},
     version=__version__,
     license="MIT",
-    install_requires=["requests", "youtube_search", "click"],
+    install_requires=["requests", "youtube_search", "click", "youtube-dl"],
 )
