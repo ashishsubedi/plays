@@ -6,7 +6,7 @@ import json
 import subprocess as sp
 from plays.utils import cmd
 from os.path import expanduser, exists, join
-from os import mkdir
+from os import mkdir, name
 
 
 class QueryType(Enum):
@@ -81,11 +81,17 @@ class YTMusic:
         if not exists(cache_dir):
             mkdir(cache_dir)
 
+        if name == "nt":
+            mpv = "mpv.com"
+        else:
+            mpv = "mpv"
+
         sp.Popen(
             [
-                "mpv",
+                mpv,
                 self.url,
                 "--no-video",
+                "--window-minimized",
                 "--cache=",
                 "yes",
                 "--cache-on-disk=",
