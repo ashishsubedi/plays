@@ -1,14 +1,12 @@
-import pprint
 import click
-import threading
 from plays.yt_music import YTMusic
-import json
 
 
 @click.command()
-@click.argument("query")
+@click.argument("query", nargs=-1)
 def plays(query: str):
     """Searches the name/url and plays"""
+    query = " ".join(query)
     click.echo(query)
     music = YTMusic()
 

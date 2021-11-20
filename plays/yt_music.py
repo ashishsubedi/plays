@@ -6,12 +6,14 @@ import json
 import subprocess as sp
 from plays.utils import cmd
 from os.path import expanduser, exists, join
-from os import mkdir
+from os import mkdir, name
+import threading
 
 
 class QueryType(Enum):
     URL = auto()
     TEXT = auto()
+    PLAYLIST = auto()
 
 
 class PlayStatus(Enum):
@@ -28,9 +30,16 @@ class YTMusic:
 
     def _text_or_url(self, query: str) -> str:
         if query.startswith("http"):
+            if "list" in query:
+                return QueryType.PLAYLIST
             return QueryType.URL
         else:
             return QueryType.TEXT
+
+    def _extract_playlist(self, playlist_url: str):
+        list_idx = playlist_url.find("list=")
+        list_id = playlist_url[list_idx:]
+        self.url = f"https://youtube.com/playlist?{list_id}"
 
     def search(self, query: str):
         click.echo("Searching...")
@@ -57,21 +66,15 @@ class YTMusic:
             )
             self.title = videos[int(choice) - 1]["title"]
 
-        else:
-            output, err = cmd(["youtube-dl", "-g", "-e", query])
-            print(output, err)
-            if err:
-                raise Exception(err)
-
-            audio_url = output.split("\n")
-            try:
-                self.url = audio_url[2]
-            except Exception:
-                raise Exception("No audio found!")
-
+        elif qt == QueryType.PLAYLIST:
+            self._extract_playlist(query)
             click.clear()
-            click.echo(f"Selected {audio_url[0]}")
-            self.title = audio_url[0]
+            click.echo(f"Playing playlist: {self.url}")
+            click.echo(f">: next, <: prev")
+        else:
+            self.url = query
+            click.clear()
+            click.echo(f"Playing {self.url}")
 
         return True
 
@@ -81,17 +84,21 @@ class YTMusic:
         if not exists(cache_dir):
             mkdir(cache_dir)
 
-        sp.Popen(
+        if name == "nt":
+            mpv = "mpv.com"
+        else:
+            mpv = "mpv"
+
+        player = sp.Popen(
             [
-                "mpv",
+                mpv,
                 self.url,
                 "--no-video",
-                "--cache=",
-                "yes",
-                "--cache-on-disk=",
-                "yes",
+                "--window-minimized",
+                "--cache=yes",
+                "--cache-on-disk",
                 f"--cache-dir={cache_dir}",
-            ]
+            ],
         ).wait()
 
     def play(self):
