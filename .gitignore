@@ -2,3 +2,6 @@
 .env
 
 __pycache__/
+build/
+dist/
+plays.egg-info/
