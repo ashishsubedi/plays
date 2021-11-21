@@ -8,8 +8,8 @@ setup(
     author_email="ashishsubedi10@gmail.com",
     description="Play songs from terminal.",
     long_description="Play songs from terminal.",
-    entry_points={"console_scripts": ["plays = plays.main:plays"]},
+    entry_points={"console_scripts": ["plays = plays.main:main"]},
     version=__version__,
     license="MIT",
-    install_requires=["requests", "youtube_search", "click", "youtube-dl"],
+    install_requires=["requests", "youtube_search", "click", "youtube-dl", "selenium"],
 )

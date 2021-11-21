@@ -1,5 +1,13 @@
 import subprocess as sp
 
+Charts = dict(
+    TOPSONGS_GLOBAL="TopSongs/global",
+    TOPSONGS_US="TopSongs/us",
+    TOPARTISTS_GLOBAL="TopArtists/global",
+    TOPARTISTS_US="TopArtists/us",
+    TRENDING_US="TrendingVideos/us",
+)
+
 
 def cmd(c):
     output, err = sp.Popen(
