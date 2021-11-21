@@ -9,6 +9,7 @@ Play music from your terminal
 3. MPV (https://mpv.io)
    > Make sure to add it into Path variable. You can check if it is installed correctly by running `mpv` command.
 4. youtube-dl (http://ytdl-org.github.io/youtube-dl/download.html)
+5. Chromedriver (for playing charts only) [https://chromedriver.chromium.org/downloads]
 
 ### How to run
 
@@ -17,3 +18,16 @@ Play music from your terminal
 
    - `plays <song name>`
    - `plays <youtube url>`
+
+### Features:
+
+1. Search and play songs from youtube:
+   - `plays <song name>`
+2. Play from youtube url:
+   - `plays <yt_song_url>`
+3. Play youtube playlist:
+   - `plays <yt_playlist_url>`
+4. Play youtube charts:
+   - `plays -c` or `plays --charts`
+   - `plays -c TOPSONGS_GLOBAL`
+   - See more info by `plays -h`
