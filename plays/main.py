@@ -47,7 +47,6 @@ def main():
     """Main entry point for cli"""
     args = parse()
     charts = None
-    print(args)
 
     if args.query:
         query = " ".join(args.query)
