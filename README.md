@@ -27,7 +27,12 @@ Play music from your terminal
    - `plays <yt_song_url>`
 3. Play youtube playlist:
    - `plays <yt_playlist_url>`
+
+> By adding flag `-r` or `--related` in above commands, it plays the first related song after completion. Eg: `plays -r <song name>`
+
 4. Play youtube charts:
    - `plays -c` or `plays --charts`
    - `plays -c TOPSONGS_GLOBAL`
    - See more info by `plays -h`
+
+> Note: Combining charts and query will result in weird behaviour. It's an intentional feature, 100%.
