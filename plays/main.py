@@ -5,7 +5,7 @@ import click
 
 from plays.yt_music import YTMusic
 from plays.utils import Charts
-from plays.extractors import YTChartsExtractor
+from plays.extractors import YTChartsExtractor, YTRelatedExtractor
 
 # TODO: Use argparse
 
@@ -22,6 +22,13 @@ def parse():
         type=str,
         nargs="*",
         help="Song name, youtube song url or playlist url",
+    )
+    parser.add_argument(
+        "-r",
+        "--related",
+        action="store_true",
+        default=False,
+        help="Flag to play next related song",
     )
     charts_group = parser.add_argument_group("charts")
     charts_group.add_argument(
@@ -40,6 +47,7 @@ def main():
     """Main entry point for cli"""
     args = parse()
     charts = None
+    print(args)
 
     if args.query:
         query = " ".join(args.query)
@@ -50,6 +58,9 @@ def main():
 
     elif args.charts:
         charts = YTChartsExtractor(args.charts)
+    else:
+        click.echo("Not valid input. Try again")
+        return
 
     if charts:
         click.echo(f"Extracting chart: {charts.chart}. Please wait few seconds...")
@@ -57,6 +68,16 @@ def main():
         query = charts.url
 
     music = YTMusic()
-    if music.search(query):
-        music.play()
+    if args.related:
+        related_extractor = YTRelatedExtractor()
+
+    while True:
+        if found := music.search(query):
+            music.play()
+        if found and args.related:
+            related_extractor.add_url(music.url)
+            query = related_extractor.extract()
+        else:
+            break
+
     print("Exiting...")
